@@ -35,11 +35,11 @@ Optional:
 
 Here is an image of how it is connected (compared to [SparkFun's wiring](https://learn.sparkfun.com/tutorials/hx1-aprs-transmitter-hookup-guide#connecting-to-trackuino) as that one has other components such as a buzzer and GPS):
 
-![Wiring Image. Why yes I did get a higher quality image of the RedBoard than what is posted on SparkFun's guide, how could you tell?](/Images/Diagram.png)
+![Wiring Image. Why yes I did get a higher quality image of the RedBoard than what is posted on SparkFun's guide, how could you tell?](Images/Diagram.png)
 
 Picture of an example setup:
 
-![Example of setup](/Images/Setup.png)
+![Example of setup](Images/Setup.png)
 
 # Building (copied from ``Trackuino-master``)
 
