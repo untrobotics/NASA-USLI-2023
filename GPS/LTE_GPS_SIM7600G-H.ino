@@ -51,7 +51,9 @@ float latitude = 0, longitude = 0, speed = 0, accuracy = 0;
 float timer = millis();
 bool run_startup = 0;
 
-void send_uptime() 
+
+//optional
+void sendStartupTime() 
 {
   String httpRequestData = "api_key=" + apiKeyValue + "&device_id=" + device_id + "";
   SerialMon.println(httpRequestData);
@@ -185,8 +187,9 @@ void loop() {
   }
   if (modem.isNetworkConnected()) { SerialMon.println("Network connected"); }
   
+  //optional
   if (!run_startup)
-    send_uptime();
+    sendStartupTime();
 
   SerialMon.println("Enabling GPS");
   enableGPS();
