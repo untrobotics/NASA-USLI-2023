@@ -1,6 +1,6 @@
 from aprs import functions
 from aprs.functions import AprsFrame
-from picamera2 import Picamera2, Preview
+#from picamera2 import Picamera2, Preview
 import time
 
 import datetime
@@ -8,16 +8,18 @@ import datetime
 #import camera_controller
 
 from lib.servo.main import Servo
+from lib.camera.main import Camera
 
 # Yes I do like type hints, no I won't not use them
 target_call_sign: str = 'KD9UDA'  # Sebastian King's call sign. Using it because we'll use it for testing later
 
-picam2 = Picamera2()
-camera_config = picam2.create_still_configuration()
-picam2.configure(camera_config)
-picam2.start()
+#picam2 = Picamera2()
+#camera_config = picam2.create_still_configuration()
+#picam2.configure(camera_config)
+#picam2.start()
 
 servo = Servo(12, 23)
+camera = Camera()
 
 # Parses the information sent and calls the corresponding commands
 def parse_frame_info(info: str):
@@ -31,9 +33,10 @@ def parse_frame_info(info: str):
              print("rotate motor left")
              servo.rotate(Servo.CLOCKWISE, 60)
         elif cmd == 'C3':
-             photo_filename = '/home/pi/capture/%s.jpg' % datetime.datetime.now()
-             print("taking picture, will place it at:", photo_filename)
-             picam2.capture_file(photo_filename)
+             #photo_filename = '/home/pi/capture/%s.jpg' % datetime.datetime.now()
+             #print("taking picture, will place it at:", photo_filename)
+             #picam2.capture_file(photo_filename)
+             camera.capture()
         elif cmd == 'D4':
             camera_controller.to_grayscale()
         elif cmd == 'E5':
