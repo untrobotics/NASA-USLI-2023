@@ -1,4 +1,8 @@
-# Setup tl;dr
+# Setup
+
+Download setup.sh and run on the pi. Requires sudo permissions
+
+# Manual Setup tl;dr
 
 `sudo apt-get install python-smbus i2c-tools`
 
