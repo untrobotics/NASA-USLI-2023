@@ -2,7 +2,7 @@ import lib_para_360_servo as lib_servo
 import pigpio
 from time import sleep
 
-class Servo:
+class ContinuousServo:
     CLOCKWISE = -1
     ANTI_CLOCKWISE = 1
 
@@ -50,11 +50,11 @@ class Servo:
         self.control.set_speed(speed * multiplier)
 
     def rotate(self, direction, degrees):
-        if direction == Servo.CLOCKWISE:
+        if direction == ContinuousServo.CLOCKWISE:
             target_angle = self.calc_target_angle_clockwise(degrees, self.current_angle)
             print("Rotating clockwise, from", self.current_angle, "to", target_angle)
 
-        if direction == Servo.ANTI_CLOCKWISE:
+        if direction == ContinuousServo.ANTI_CLOCKWISE:
             target_angle = self.calc_target_angle_anti_clockwise(degrees, self.current_angle)
             print("Rotating anti-clockwise, from", self.current_angle, "to", target_angle)
 
@@ -65,17 +65,17 @@ class Servo:
             self.current_angle = self.get_angle(self.feedback.read())
 
             # check for overflow, and overflow the last angle if necessary
-            if direction == Servo.CLOCKWISE and self.current_angle < last_angle - 300:
+            if direction == ContinuousServo.CLOCKWISE and self.current_angle < last_angle - 300:
                 last_angle = 0
 
-            if direction == Servo.ANTI_CLOCKWISE and self.current_angle > last_angle + 300:
+            if direction == ContinuousServo.ANTI_CLOCKWISE and self.current_angle > last_angle + 300:
                 last_angle = 360
 
-            if (direction == Servo.CLOCKWISE and self.current_angle >= target_angle and target_angle >= last_angle) or (direction == Servo.ANTI_CLOCKWISE and self.current_angle <= target_angle and target_angle <= last_angle):
+            if (direction == ContinuousServo.CLOCKWISE and self.current_angle >= target_angle and target_angle >= last_angle) or (direction == ContinuousServo.ANTI_CLOCKWISE and self.current_angle <= target_angle and target_angle <= last_angle):
                 print("Final measured angle", self.current_angle)
                 self.control.stop()
                 break
 
 if __name__ == '__main__':
-    servo = Servo(12, 23)
-    servo.rotate(Servo.ANTI_CLOCKWISE, 60)
+    servo = ContinuousServo(12, 23)
+    servo.rotate(ContinuousServo.ANTI_CLOCKWISE, 60)

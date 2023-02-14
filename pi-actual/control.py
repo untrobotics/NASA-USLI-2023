@@ -7,6 +7,7 @@ from kiss import KISS
 import kiss
 import command_caller
 from lib.landing_detection.main import LandingDetection
+from lib.simple_servo.main import SimpleServo
 
 print("Hello")
 
@@ -26,6 +27,15 @@ def main():
         landing_detection.detect_landing()
         print("Phoenix has landed!")
 
+        print("Actuating the required servos...")
+        door_servo_left = SimpleServo(1)
+        door_servo_right = SimpleServo(2)
+        parachute_release_servo = SimpleServo(3)
+
+        door_servo_left.set_position(180)
+        door_servo_right.set_position(180)
+        parachute_release_servo.set_position(180)
+
         print("Beginning...")
         ki = kiss.TCPKISS(host='localhost', port=8001)
         print("Kissed")
@@ -38,10 +48,8 @@ def main():
         print("Error occurred in main loop, re-running...", e)
         # Get current system exception
         ex_type, ex_value, ex_traceback = sys.exc_info()
-
         # Extract unformatter stack traces as tuples
         trace_back = traceback.extract_tb(ex_traceback)
-
         # Format stacktrace
         stack_trace = list()
 

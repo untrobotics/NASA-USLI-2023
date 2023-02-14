@@ -7,13 +7,13 @@ import datetime
 
 #import camera_controller
 
-from lib.servo.main import Servo
+from lib.servo.main import ContinuousServo
 from lib.camera.main import Camera
 
 # Yes I do like type hints, no I won't not use them
 target_call_sign: str = 'KD9UDA'  # Sebastian King's call sign. Using it because we'll use it for testing later
 
-servo = Servo(12, 23)
+servo = ContinuousServo(12, 23)
 camera = Camera()
 
 # Parses the information sent and calls the corresponding commands
@@ -23,10 +23,10 @@ def parse_frame_info(info: str):
     for cmd in commands:
         if cmd == 'A1': # right
              print("A1: rotate motor 60 degrees clockwise (right)")
-             servo.rotate(Servo.ANTI_CLOCKWISE, 60)
+             servo.rotate(ContinuousServo.ANTI_CLOCKWISE, 60)
         elif cmd == 'B2': # left
              print("B2: rotate motor 60 degress anti-clockwise (left)")
-             servo.rotate(Servo.CLOCKWISE, 60)
+             servo.rotate(ContinuousServo.CLOCKWISE, 60)
         elif cmd == 'C3':
              print("C3: capture picture")
              camera.capture()
