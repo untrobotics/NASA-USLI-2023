@@ -4,8 +4,11 @@ from kiss import KISS
 
 import kiss
 import command_caller
+from lib.landing_detection.main import LandingDetection
 
 print("Hello")
+
+landing_detection = LandingDetection()
 
 def loop(ki: KISS):
     ki.start()
@@ -16,11 +19,22 @@ def loop(ki: KISS):
 
 
 def main():
-    print("Beginning...")
-    ki = kiss.TCPKISS(host='localhost', port=8001)
-    print("Kissed")
+    try:
+        print("Landing detection starting...")
+        landing_detection.detect_landing()
+        print("Phoenix has landed!")
 
-    loop(ki)
+        print("Beginning...")
+        ki = kiss.TCPKISS(host='localhost', port=8001)
+        print("Kissed")
+
+        loop(ki)
+    except KeyboardInterrupt:
+        print("KBI")
+        return
+    except Exception as e:
+        print("Error occurred in main loop, re-running...", e)
+        main()
 
 if __name__ == '__main__':
     print("Calling main")
