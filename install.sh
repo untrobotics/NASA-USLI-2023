@@ -20,6 +20,6 @@ sudo apt-get install -y direwolf rtl-sdr multimon
 #reboot
 #sudo reboot
 
-sudo pip3 install aprs kiss picamera2
+sudo pip3 install aprs kiss picamera2 pigpio
 sudo pip3 install adafruit-circuitpython-mpu6050
 sudo pip3 install adafruit-circuitpython-bmp3xx
