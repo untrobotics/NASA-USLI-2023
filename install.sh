@@ -1,5 +1,5 @@
 sudo apt-get update
-sudo apt-get install -y pigpiod python python3 python3-pip i2c-tools git python3-smbus
+sudo apt-get install -y pigpiod python3 python3-pip i2c-tools git python3-smbus
 sudo systemctl enable pigpiod
 
 # 2023 specific installs
