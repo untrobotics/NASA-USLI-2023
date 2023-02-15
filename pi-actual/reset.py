@@ -2,47 +2,20 @@
 import sys
 import traceback
 
-from kiss import KISS
-
-import kiss
-import command_caller
-from lib.landing_detection.main import LandingDetection
 from lib.simple_servo.main import SimpleServo
 
 from time import sleep
 
-print("Hello")
-
-landing_detection = LandingDetection()
-
-def loop(ki: KISS):
-    ki.start()
-    print("Loop started");
-
-    # get our info without DTI using str(functions.parse_frame_ax25(frame).info)[1:]
-    ki.read(callback=command_caller.read_frame)
-
-
 def main():
     try:
-        print("Landing detection starting...")
-        landing_detection.detect_landing()
-        print("Phoenix has landed!")
-
         print("Actuating the required servos...")
         door_servo_left = SimpleServo(16)
         door_servo_right = SimpleServo(2)
         parachute_release_servo = SimpleServo(3)
 
-        door_servo_left.set_position(180)
-        door_servo_right.set_position(180)
-        parachute_release_servo.set_position(180)
-
-        print("Beginning...")
-        ki = kiss.TCPKISS(host='localhost', port=8001)
-        print("Kissed")
-
-        loop(ki)
+        door_servo_left.set_position(0)
+        door_servo_right.set_position(0)
+        parachute_release_servo.set_position(0)
     except KeyboardInterrupt:
         print("KBI")
         return
