@@ -1,4 +1,4 @@
-sudo apt-get install -y pigpiod python python3 python-pip python3-pip i2c-tools git python-smbus
+sudo apt-get install -y pigpiod python python3 python3-pip i2c-tools git python3-smbus
 sudo systemctl enable pigpiod
 
 # 2023 specific installs
@@ -19,3 +19,6 @@ sudo apt-get install -y direwolf rtl-sdr multimon
 #reboot
 #sudo reboot
 
+sudo pip3 install aprs kiss picamera2
+sudo pip3 install adafruit-circuitpython-mpu6050
+sudo pip3 install adafruit-circuitpython-bmp3xx
