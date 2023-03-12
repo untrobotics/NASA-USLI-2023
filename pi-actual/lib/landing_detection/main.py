@@ -8,6 +8,8 @@ class LandingDetection:
     agl_offset = None
 
     altitude_last_10 = deque([0 for i in range(10)])
+    activation_threshold_height = 500
+    activation_threshold_reached = False
 
     has_landed = False
 
@@ -45,7 +47,15 @@ class LandingDetection:
             bmp_temperature = self.bmp.temperature
             height = altitude - self.agl_offset
 
-            print("Accel: {}ms^-2, Gyro: {}rad/s, Alt: {}m, Height: {}m, T(MPU): {}C, T(BMP): {}C".format(accel, gyro, altitude, height, mpu_temperature, bmp_temperature))
+            if height > self.activation_threshold_height:
+                self.activation_threshold_reached = True
+
+            print("Accel: {}ms^-2".format(accel))
+            print("Gyro: {}rad/s".format(gyro))
+            print("Alt: {}m".format(altitude))
+            print("Height: {}m".format(height))
+            print("Temperature (MPU): {}C".format(mpu_temperature))
+            print("Temperature (BMP): {}C".format(bmp_temperature))
             # check if height is less than 1m and has not changed significantly for 1s (10 iterations)
             self.altitude_last_10.popleft()
             self.altitude_last_10.append(altitude)
@@ -53,7 +63,7 @@ class LandingDetection:
             print("Deltas: {} ({})".format(delta, self.altitude_last_10))
             print("----------------------")
 
-            if abs(delta) < 1 and height < 1:
+            if abs(delta) < 1 and height < 1 and self.activation_threshold_reached:
                 return
             sleep(0.1)
 
