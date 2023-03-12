@@ -2,6 +2,7 @@ from time import sleep
 import board
 import adafruit_bmp3xx
 import adafruit_mpu6050
+import datetime
 from collections import deque
 
 class LandingDetection:
@@ -50,6 +51,7 @@ class LandingDetection:
             if height > self.activation_threshold_height:
                 self.activation_threshold_reached = True
 
+            print('Time: {date:%Y-%m-%d_%H:%M:%S.%f}'.format( date=datetime.datetime.now()))
             print("Accel: {}ms^-2".format(accel))
             print("Gyro: {}rad/s".format(gyro))
             print("Alt: {}m".format(altitude))
