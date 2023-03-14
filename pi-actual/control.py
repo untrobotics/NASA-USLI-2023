@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import traceback
+import signal
 
 from kiss import KISS
 
@@ -15,9 +16,17 @@ print("Hello")
 
 landing_detection = LandingDetection()
 
+
+def kbi_handler(sig, frame):
+    print('Keyboard Interrupt')
+    landing_detection.deinit()
+    # command_caller.camera.picam2.close()    # Maybe needed? Add back if needed
+    sys.exit(0)
+
+
 def loop(ki: KISS):
     ki.start()
-    print("Loop started");
+    print("Loop started")
 
     # get our info without DTI using str(functions.parse_frame_ax25(frame).info)[1:]
     ki.read(callback=command_caller.read_frame)
@@ -43,9 +52,6 @@ def main():
         print("Kissed")
 
         loop(ki)
-    except KeyboardInterrupt:
-        print("KBI")
-        return
     except Exception as e:
         print("Error occurred in main loop, re-running...", e)
         # Get current system exception
@@ -56,7 +62,8 @@ def main():
         stack_trace = list()
 
         for trace in trace_back:
-            stack_trace.append("File : %s , Line : %d, Func.Name : %s, Message : %s" % (trace[0], trace[1], trace[2], trace[3]))
+            stack_trace.append(
+                "File : %s , Line : %d, Func.Name : %s, Message : %s" % (trace[0], trace[1], trace[2], trace[3]))
 
         print("Exception type : %s " % ex_type.__name__)
         print("Exception message : %s" % ex_value)
@@ -64,6 +71,10 @@ def main():
         sleep(10)
         main()
 
+
 if __name__ == '__main__':
+    print('Adding signal handler')
+    signal.signal(signal.SIGINT, kbi_handler)
+
     print("Calling main")
     main()
