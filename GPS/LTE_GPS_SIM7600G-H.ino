@@ -20,11 +20,7 @@
 #include "utilities.h"
 const int  port = 80;
 
-// Your GPRS credentials, if any
-const char apn[] = "iot.truphone.com";
-// const char apn[] = "ibasis.iot";
-const char gprsUser[] = "";
-const char gprsPass[] = "";
+const char apn[] = "h2g2";
 
 //Initialized in Secrets.h
 //const char server[] = "";
@@ -168,7 +164,7 @@ void setup() {
 void loop() {
   SerialMon.println("Looping");
 
-  if (!modem.gprsConnect("iot.truphone.com")) {
+  if (!modem.gprsConnect(apn)) {
     SerialMon.println("Failed GRPS setup");
     delay(1000);
     return;
