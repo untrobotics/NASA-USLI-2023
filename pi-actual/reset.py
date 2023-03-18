@@ -9,9 +9,9 @@ from time import sleep
 def main():
     try:
         print("Actuating the required servos...")
-        door_servo_left = SimpleServo(16)
-        door_servo_right = SimpleServo(2)
-        parachute_release_servo = SimpleServo(3)
+        door_servo_left = SimpleServo(19)
+        door_servo_right = SimpleServo(26)
+        parachute_release_servo = SimpleServo(13)
 
         door_servo_left.set_position(0)
         door_servo_right.set_position(0)
