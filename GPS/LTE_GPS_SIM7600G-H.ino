@@ -1,3 +1,5 @@
+// https://github.com/govorox/SSLClient needs to be manually installed
+
 #define TINY_GSM_MODEM_SIM7600
 
 // Set serial for debug console (to the Serial Monitor, default speed 115200)
@@ -16,16 +18,12 @@
 #define GSM_PIN ""
 
 // Server details
-#include "Secrets.h"
 #include "utilities.h"
-const int  port = 80;
+String device_id = "seb";
 
 const char apn[] = "h2g2";
 
-//Initialized in Secrets.h
-//const char server[] = "";
-//String resource = "";
-
+#include <SSLClient.h>
 #include <TinyGsmClient.h>
 #include <ArduinoHttpClient.h>
 #include <SPI.h>
@@ -41,7 +39,8 @@ TinyGsm        modem(SerialAT);
 #endif
 
 TinyGsmClient client(modem, 0);
-HttpClient    http(client, server, port);
+SSLClient secure_layer(&client);
+HttpClient    http(secure_layer, "www.untrobotics.com", 443);
 
 float latitude = 0, longitude = 0, speed = 0, accuracy = 0;
 float timer = millis();
@@ -51,11 +50,11 @@ bool run_startup = 0;
 //optional
 void sendStartupTime() 
 {
-  String httpRequestData = "api_key=" + apiKeyValue + "&device_id=" + device_id + "";
+  String httpRequestData = "device_id=" + device_id + "";
   SerialMon.println(httpRequestData);
   String contentType = "application/x-www-form-urlencoded";
   SerialMon.print(F("Performing HTTP POST request... "));
-  int err = http.post(uptime_resource, contentType, httpRequestData);
+  int err = http.post("/api/rocketry/gps/init", contentType, httpRequestData);
   if (err != 0) {
     SerialMon.println(F("failed to connect"));
     SerialMon.println(err);
@@ -150,7 +149,7 @@ void setup() {
     return;
   }
 
-  uint8_t ret = modem.setNetworkMode(2);
+  String ret = modem.setNetworkMode(2);
   DBG("setNetworkMode:", ret);
 
   String modemInfo = modem.getModemInfo();
@@ -205,11 +204,11 @@ void loop() {
 
   delay(1000);
 
-  String httpRequestData = "api_key=" + apiKeyValue + "&latitude=" + String(latitude, 6) + "&longitude=" + String(longitude,6) + "&speed=" + String(speed,3) + "&accuracy=" + String(accuracy,4) + "";
+  String httpRequestData = "latitude=" + String(latitude, 6) + "&longitude=" + String(longitude,6) + "&speed=" + String(speed,3) + "&accuracy=" + String(accuracy,4) + "";
   SerialMon.println(httpRequestData);
   String contentType = "application/x-www-form-urlencoded";
   SerialMon.print(F("Performing HTTP POST request... "));
-  int err = http.post(resource, contentType, httpRequestData);
+  int err = http.post("/api/rocketry/gps/track", contentType, httpRequestData);
   if (err != 0) {
     SerialMon.println(F("failed to connect"));
     SerialMon.println(err);
