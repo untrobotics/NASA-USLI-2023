@@ -17,13 +17,22 @@ class DoorOpener:
     def open_doors(self):
         self.l_servo.set_position(50)
         self.r_servo.set_position(50)
-        servo_current_pos = 50
+        l_pos = 50
+        r_pos = 50
         sleep(2)    # To allow time to get the things in position
         print('Servos in required position...Adjusting for tilt')
-        while (not self.pi.read(self.tilt_sensor_l_gpio) or not self.pi.read(self.tilt_sensor_r_gpio)) and servo_current_pos<180:
-            servo_current_pos += 1
-            self.l_servo.set_position(servo_current_pos)
-            self.r_servo.set_position(servo_current_pos)
-            print("New position at %s degrees", servo_current_pos)
+        condition = True
+        while condition:
+            condition = False
+            if not self.pi.read(self.tilt_sensor_l_gpio) and l_pos < 180:
+                condition = True
+                l_pos += 1
+                self.l_servo.set_position(l_pos)
+                print("Left servo position: %s degrees", l_pos)
+            if not self.pi.read(self.tilt_sensor_r_gpio) and r_pos < 180:
+                r_pos += 1
+                self.r_servo.set_position(r_pos)
+                condition = True
+                print("Right servo position: %s degrees", r_pos)
             sleep(1)   # May need more time to get the tilt sensors to stabilize
-        print("Final position: %s", servo_current_pos)
+        print("Final servo positions: \n\tLeft: %s\n\tRight: %s", l_pos, r_pos)
