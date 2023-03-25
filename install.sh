@@ -27,3 +27,8 @@ sudo pip3 install aprs kiss picamera2 pigpio
 sudo pip3 install adafruit-circuitpython-mpu6050
 sudo pip3 install adafruit-circuitpython-bmp3xx
 sudo pip3 install adafruit-circuitpython-bno055
+
+if [ ! -d "/home/pi/capture" ]
+then
+  sudo mkdir /home/pi/capture
+fi
