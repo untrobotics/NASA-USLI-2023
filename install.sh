@@ -20,7 +20,7 @@ sudo apt-get install -y direwolf rtl-sdr multimon
 #reboot
 #sudo reboot
 if !  cat /etc/rc.local | grep ^[[:space:]]*/home/pi/NASA-USLI-2023/pi-actual/startup.sh ; then
-  sudo sed -ri 's/^(\s*exit\s+0[^\n\r]*)/\/home\/pi\/NASA-USLI-2023\/pi-actual\/startup.sh ;\n\1/' /etc/rc.local ;
+  sudo sed -ri 's/^(\s*exit\s+0[^\n\r]*)/\/home\/pi\/NASA-USLI-2023\/pi-actual\/startup.sh\n\1/' /etc/rc.local ;
 fi
 
 sudo pip3 install aprs kiss picamera2 pigpio
