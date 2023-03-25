@@ -10,7 +10,7 @@ class LandingDetection:
     agl_offset = None
 
     altitude_last_10 = deque([0 for i in range(10)])
-    activation_threshold_height = 1
+    activation_threshold_height = 500
     activation_threshold_reached = False
 
     has_landed = False
