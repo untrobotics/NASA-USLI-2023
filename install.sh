@@ -30,5 +30,5 @@ sudo pip3 install adafruit-circuitpython-bno055
 
 if [ ! -d "/home/pi/capture" ]
 then
-  sudo mkdir /home/pi/capture
+  mkdir /home/pi/capture
 fi
