@@ -21,7 +21,7 @@ class DoorOpener:
         self.pi.set_mode(self.tilt_sensor_r_gpio, pigpio.INPUT)
         self.pi.set_mode(self.tilt_sensor_l_gpio, pigpio.PUD_DOWN)
         self.pi.set_mode(self.tilt_sensor_r_gpio, pigpio.PUD_DOWN)
-        self.euler_readings = deque([0 for i in range(10)])
+        self.euler_readings = deque([-900 for i in range(10)])
 
 #    def open_doors(self):
 #        self.l_servo.set_position(50)
@@ -61,8 +61,8 @@ class DoorOpener:
                 self.bno.mode = adafruit_bno055.NDOF_MODE
                 continue
             self.euler_readings.append(self.bno.euler[1])
-            if len(self.euler_readings) > 10:
-                self.euler_readings.popleft()
+            print("Euler val:", self.euler_readings[-1])
+            self.euler_readings.popleft()
             if abs(max(self.euler_readings) - min(self.euler_readings)) < 3:
                 if self.euler_readings[-1] > self.pitch_threshold:
                     if l_pos >= 180:
