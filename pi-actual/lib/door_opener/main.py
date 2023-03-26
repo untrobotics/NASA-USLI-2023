@@ -24,11 +24,12 @@ class DoorOpener:
         self.euler_readings = deque([0 for i in range(10)])
 
     def open_doors(self):
-        self.l_servo.set_position(50)
-        time.sleep(5)
-        self.r_servo.set_position(50)
         l_pos = 50
         r_pos = 50
+        self.l_servo.set_position(l_pos)
+        time.sleep(5)
+        self.r_servo.set_position(r_pos)
+
         sleep(2)    # To allow time to get the things in position
         print('Servos in required position...Adjusting for tilt')
         count = 0
@@ -37,15 +38,15 @@ class DoorOpener:
             self.euler_readings.append(self.bno.euler[1])
             if len(self.euler_readings) > 10:
                 self.euler_readings.popleft()
-            if abs(max(self.euler_readings) - min(self.euler_readings)) < 2:
-                if self.euler_readings[-1] > 1:
+            if abs(max(self.euler_readings) - min(self.euler_readings)) < 3:
+                if self.euler_readings[-1] > self.pitch_threshold:
                     if l_pos >= 180:
                         continue
                     l_pos += 1
                     self.l_servo.set_position(l_pos)
                     print("Left servo position: %s degrees", l_pos)
                     count = 0
-                elif self.euler_readings[-1] < 1:
+                elif self.euler_readings[-1] < -self.pitch_threshold:
                     if r_pos >=180:
                         continue
                     r_pos += 1
@@ -54,15 +55,15 @@ class DoorOpener:
                     count = 0
                 else:
                     count += 1
-            elif abs(self.euler_readings[-1]-self.euler_readings[-2]) > 5:
-                if self.euler_readings[-1] > 1:
+            elif abs(self.euler_readings[-1]-self.euler_readings[-2]) < 3:
+                if self.euler_readings[-1] > self.pitch_threshold:
                     if l_pos >= 180:
                         continue
                     l_pos += 1
                     self.l_servo.set_position(l_pos)
                     print("Left servo position: %s degrees", l_pos)
                     count = 0
-                elif self.euler_readings[-1] < 1:
+                elif self.euler_readings[-1] < -self.pitch_threshold:
                     if r_pos >= 180:
                         continue
                     r_pos += 1
