@@ -21,6 +21,7 @@ class DoorOpener:
         self.pi.set_mode(self.tilt_sensor_r_gpio, pigpio.INPUT)
         self.pi.set_mode(self.tilt_sensor_l_gpio, pigpio.PUD_DOWN)
         self.pi.set_mode(self.tilt_sensor_r_gpio, pigpio.PUD_DOWN)
+        self.euler_readings = deque([0 for i in range(10)])
 
 #    def open_doors(self):
 #        self.l_servo.set_position(50)
