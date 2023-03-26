@@ -36,7 +36,7 @@ def main():
         print('Parachute released.')
 
         print('Opening doors...')
-        doors = DoorOpener(19,26,17,27)
+        doors = DoorOpener(19,26,22,27)
         doors.open_doors()
         print('Doors opened!')
         #
