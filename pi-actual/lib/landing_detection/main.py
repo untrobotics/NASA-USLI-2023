@@ -2,6 +2,7 @@ from time import sleep
 import board
 import adafruit_bmp3xx
 import adafruit_mpu6050
+import adafruit_bno055
 import datetime
 from collections import deque
 
@@ -21,6 +22,12 @@ class LandingDetection:
        i2c = board.I2C()
        self.mpu = adafruit_mpu6050.MPU6050(i2c, 0x69) # short ad0 to ground
        self.bmp = adafruit_bmp3xx.BMP3XX_I2C(i2c)
+       self.bno = None
+       try:
+              self.bno = adafruit_bno055.BNO055_I2C(i2c)
+       except:
+              print("no bno")
+              pass
        self.calibrate()
 
     def calibrate(self):
@@ -47,6 +54,11 @@ class LandingDetection:
             altitude = self.bmp.altitude
             bmp_temperature = self.bmp.temperature
             height = altitude - self.agl_offset
+            orientation = None
+            if self.bno is None:
+                  orientation = "No bno"
+            else:
+                  orientation = self.bno.euler
 
             if height > self.activation_threshold_height:
                 self.activation_threshold_reached = True
@@ -58,6 +70,7 @@ class LandingDetection:
             print("Height: {}m".format(height))
             print("Temperature (MPU): {}C".format(mpu_temperature))
             print("Temperature (BMP): {}C".format(bmp_temperature))
+            print("Orientation (BNO): {}".format(orientation))
             # check if height is less than 1m and has not changed significantly for 1s (10 iterations)
             self.altitude_last_10.popleft()
             self.altitude_last_10.append(altitude)

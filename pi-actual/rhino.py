@@ -7,8 +7,8 @@ from kiss import KISS
 import kiss
 import command_caller
 from lib.landing_detection.main import LandingDetection
-from lib.simple_servo.main import SimpleServo
-from lib.door_opener.main import DoorOpener
+#from lib.simple_servo.main import SimpleServo
+#from lib.door_opener.main import DoorOpener
 
 from time import sleep
 
@@ -30,15 +30,15 @@ def main():
         landing_detection.detect_landing()
         print("Phoenix has landed!")
 
-        print('Releasing parachute...')
-        parachute_release_servo = SimpleServo(13)
-        parachute_release_servo.set_position(180)
-        print('Parachute released.')
+        #print('Releasing parachute...')
+        #parachute_release_servo = SimpleServo(13)
+        #parachute_release_servo.set_position(180)
+        #print('Parachute released.')
 
-        print('Opening doors...')
-        doors = DoorOpener(19,26,22,27)
-        doors.open_doors()
-        print('Doors opened!')
+        #print('Opening doors...')
+        #doors = DoorOpener(19,26,17,27)
+        #doors.open_doors()
+        #print('Doors opened!')
         #
         # door_servo_left = SimpleServo(19)
         # door_servo_right = SimpleServo(26)
