@@ -90,5 +90,5 @@ class DoorOpener:
             #     condition = True
             #     print("Right servo position: %s degrees", r_pos)
 
-            sleep(1)   # May need more time to get the tilt sensors to stabilize
+            # sleep(1)   # May need more time to get the tilt sensors to stabilize
         print("Final servo positions: \n\tLeft: %s\n\tRight: %s", l_pos, r_pos)
