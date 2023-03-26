@@ -35,6 +35,9 @@ class DoorOpener:
         count = 0
         while True:
             time.sleep(0.1)
+            if self.bno.euler[0] is None:
+                self.bno.mode = adafruit_bno055.NDOF_MODE
+                continue
             self.euler_readings.append(self.bno.euler[1])
             if len(self.euler_readings) > 10:
                 self.euler_readings.popleft()
