@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import pigpio
-from ..simple_servo.main import SimpleServo
-from time import sleep
-
-class DoorOpener:
-=======
 import time
 
 import pigpio
