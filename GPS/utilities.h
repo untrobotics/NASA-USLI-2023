@@ -10,6 +10,7 @@
 #define MODEM_RI            33
 #define MODEM_FLIGHT        25
 #define MODEM_STATUS        34
+#define BAT_ADC             35
 
 #define SD_MISO             2
 #define SD_MOSI             15
