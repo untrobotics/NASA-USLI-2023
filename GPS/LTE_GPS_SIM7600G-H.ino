@@ -21,7 +21,7 @@
 #include "utilities.h"
 String device_id = "seb";
 
-const char apn[] = "h2g2";
+const char apn[] = "everywhere"; // h2g2 = google fi, everywhere = ee
 
 #include <SSLClient.h>
 #include <TinyGsmClient.h>
@@ -40,7 +40,7 @@ TinyGsm        modem(SerialAT);
 
 TinyGsmClient client(modem, 0);
 SSLClient secure_layer(&client);
-HttpClient    http(secure_layer, "www.untrobotics.com", 443);
+HttpClient    http(secure_layer, "c.massivesoft.net", 443);
 
 float latitude = 0, longitude = 0, speed = 0, accuracy = 0;
 float timer = millis();
@@ -50,11 +50,11 @@ bool run_startup = 0;
 //optional
 void sendStartupTime() 
 {
-  String httpRequestData = "device_id=" + device_id + "";
+  String httpRequestData = "{\"device_id\":\"" + device_id + "\"}";
   SerialMon.println(httpRequestData);
   String contentType = "application/x-www-form-urlencoded";
   SerialMon.print(F("Performing HTTP POST request... "));
-  int err = http.post("/api/rocketry/gps/init", contentType, httpRequestData);
+  int err = http.post("/api/track/init.php", contentType, httpRequestData);
   if (err != 0) {
     SerialMon.println(F("failed to connect"));
     SerialMon.println(err);
@@ -100,6 +100,14 @@ void sendStartupTime()
     run_startup = 1;
 
   return;
+}
+
+float readBattery(uint8_t pin)
+{
+    int vref = 1100;
+    uint16_t volt = analogRead(pin);
+    float battery_ = ((float)volt / 4095.0) * 2.0 * 3.3 * (vref);
+    return battery_;
 }
 
 void enableGPS(void)
@@ -149,7 +157,7 @@ void setup() {
     return;
   }
 
-  String ret = modem.setNetworkMode(2);
+  bool ret = modem.setNetworkMode(2);
   DBG("setNetworkMode:", ret);
 
   String modemInfo = modem.getModemInfo();
@@ -204,11 +212,15 @@ void loop() {
 
   delay(1000);
 
-  String httpRequestData = "latitude=" + String(latitude, 6) + "&longitude=" + String(longitude,6) + "&speed=" + String(speed,3) + "&accuracy=" + String(accuracy,4) + "";
+  float voltage = readBattery(BAT_ADC);
+  SerialMon.print(F("BAT : "));
+  SerialMon.println();
+
+  String httpRequestData = "{\"device_id\":\"" + device_id + "\",\"latitude\":\"" + String(latitude, 6) + "\",\"longitude\":\"" + String(longitude,6) + "\",\"speed\":\"" + String(speed,3) + "\",\"accuracy\":\"" + String(accuracy,4) + "\",\"battery_voltage\":\"" + String(voltage,4) + "\"}";
   SerialMon.println(httpRequestData);
   String contentType = "application/x-www-form-urlencoded";
   SerialMon.print(F("Performing HTTP POST request... "));
-  int err = http.post("/api/rocketry/gps/track", contentType, httpRequestData);
+  int err = http.post("/api/track/update.php", contentType, httpRequestData);
   if (err != 0) {
     SerialMon.println(F("failed to connect"));
     SerialMon.println(err);
