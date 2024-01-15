@@ -40,8 +40,9 @@ TinyGsm        modem(SerialAT);
 
 TinyGsmClient client(modem, 0);
 SSLClient secure_layer(&client);
-HttpClient    http(secure_layer, "c.massivesoft.net", 443);
+HttpClient    http(secure_layer, "untrobotics.com", 443);
 
+int max_gps_read_attempts_in_loop = 100;
 float latitude = 0, longitude = 0, speed = 0, accuracy = 0;
 float timer = millis();
 bool run_startup = 0;
@@ -199,11 +200,20 @@ void loop() {
   
   float alt;
   int year, month, day, hour, minute, second, vsat, usat;
+  int i = 0;
   while (1) {
+    if (i >= max_gps_read_attempts_in_loop) {
+      year, month, day, hour, minute, second, vsat, usat, alt = 0;
+      break;
+    }
+
+    SerialMon.println("Attempting GPS read (attempt " + String(i+1) + " of " + String(max_gps_read_attempts_in_loop) + ")");
     if (modem.getGPS(&latitude, &longitude, &speed, &alt, &vsat, &usat, &accuracy, &year, &month, &day, &hour, &minute, &second)) 
     {
       break;
     }
+
+    i++;
     delay(2000);
   }
   digitalWrite(LED_PIN, LOW);
