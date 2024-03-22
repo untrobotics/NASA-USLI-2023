@@ -23,10 +23,10 @@ if !  cat /etc/rc.local | grep ^[[:space:]]*/home/pi/NASA-USLI-2023/pi-actual/st
   sudo sed -ri 's/^(\s*exit\s+0[^\n\r]*)/\/home\/pi\/NASA-USLI-2023\/pi-actual\/startup.sh\n\1/' /etc/rc.local ;
 fi
 sudo apt-get install -y python3-prctl
-sudo pip3 install aprs kiss picamera2 pigpio
-sudo pip3 install adafruit-circuitpython-mpu6050
-sudo pip3 install adafruit-circuitpython-bmp3xx
-sudo pip3 install adafruit-circuitpython-bno055
+sudo pip3 install aprs kiss picamera2 pigpio --break-system-packages
+sudo pip3 install adafruit-circuitpython-mpu6050 --break-system-packages
+sudo pip3 install adafruit-circuitpython-bmp3xx --break-system-packages
+sudo pip3 install adafruit-circuitpython-bno055 --break-system-packages
 
 if [ ! -d "/home/pi/capture" ]
 then
